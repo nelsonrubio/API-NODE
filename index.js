@@ -9,29 +9,26 @@ app.get('/search/:nombre', function(req, res) {
         // se crea un arreglo para ir guardando los resultados en cada interaccion.
     let busqueda = { resultado: [] }
     axios.get('https://itunes.apple.com/search?term=' + req.params.nombre + '&limit=10').then(response => {
-            //se procede a realizar la verificacion de si hay resultados
-            if (response.data.results.length > 0) {
-                // De tener informacion se recorre el arreglo para extraer cierta informacion y alamecenarla en el arreglo
-                response.data.results.map(function(info, index) {
-                    resultado = { nombre: info.artistName, contenido: info.collectionName, tipo: info.kind, imagen: info.artworkUrl100, icon: 'https://w7.pngwing.com/pngs/1008/698/png-transparent-musical-note-illustration-apple-music-app-store-itunes-ios-11-share-fruit-nut-subscription-business-model-macrumors-thumbnail.png' };
-                    busqueda.resultado.push(resultado);
-                });
-                // se ordena el arreglo por orden alfabetico
-                busqueda.resultado = busqueda.resultado.sort((a, b) => {
-                        if (a.nombre > b.nombre) {
-                            return 1;
-                        }
-                        if (a.nombre < b.nombre) {
-                            return -1;
-                        }
 
-                        return 0;
-                    })
-                    // se retorna la informacion.
-                res.json({ busqueda });
-            } else {
-                res.json({ busqueda });
-            }
+            // De tener informacion se recorre el arreglo para extraer cierta informacion y alamecenarla en el arreglo
+            response.data.results.map(function(info, index) {
+                resultado = { nombre: info.artistName, contenido: info.collectionName, tipo: info.kind, imagen: info.artworkUrl100, icon: 'https://w7.pngwing.com/pngs/1008/698/png-transparent-musical-note-illustration-apple-music-app-store-itunes-ios-11-share-fruit-nut-subscription-business-model-macrumors-thumbnail.png' };
+                busqueda.resultado.push(resultado);
+            });
+            // se ordena el arreglo por orden alfabetico
+            busqueda.resultado = busqueda.resultado.sort((a, b) => {
+                    if (a.nombre > b.nombre) {
+                        return 1;
+                    }
+                    if (a.nombre < b.nombre) {
+                        return -1;
+                    }
+
+                    return 0;
+                })
+                // se retorna la informacion.
+            res.json({ busqueda });
+
         })
         .catch(e => {
             console.log(e)
